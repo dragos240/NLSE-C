@@ -6,6 +6,7 @@ typedef struct garden_s{
 
 	char* town_name;
 	int town_hall_color;
+	int train_station_color;
 	int grass_type;
 	int native_fruit;
 	unsigned int seconds_played;
