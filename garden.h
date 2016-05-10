@@ -1,7 +1,7 @@
 #ifndef NLSE_H
 #define NLSE_H
 typedef struct garden_s{
-	char* data,
+	char* data;
 	char* town_bytes;
 
 	char* town_name;
@@ -12,6 +12,6 @@ typedef struct garden_s{
 	unsigned short play_days;
 } garden_t;
 
-int load_garden(char *garden);
+garden_t load_garden(FILE gardenfd);
 
 #endif
