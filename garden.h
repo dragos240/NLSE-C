@@ -13,6 +13,6 @@ typedef struct garden_s{
 	unsigned short play_days;
 } garden_t;
 
-garden_t load_garden(FILE gardenfd);
+garden_t load_garden(FILE *gardenfd);
 
 #endif

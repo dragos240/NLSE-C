@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "garden.h"
-#include "nlse.h"
+
+extern garden_t load_garden(FILE *gardenfd); 
 
 int main(int argc, char* argv[]){
 	int lg;
 	FILE *fd;
+	garden_t garden;
 
 	if(argc < 2 || strstr("garden.dat", argv[1]) == NULL){
 		printf("%d %s\n", argc, argv[1]);
@@ -18,6 +20,8 @@ int main(int argc, char* argv[]){
 		printf("ERROR: Could not open garden.dat for reading!\n");
 		return 1;
 	}
+
+	garden = load_data(fd);
 
 	printf("Garden.dat file loaded!\n");
 
