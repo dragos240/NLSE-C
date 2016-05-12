@@ -1,5 +1,5 @@
-#ifndef NLSE_H
-#define NLSE_H
+#ifndef GARDEN_H
+#define GARDEN_H
 typedef struct garden_s{
 	char* data;
 	char* town_bytes;
@@ -13,6 +13,6 @@ typedef struct garden_s{
 	unsigned short play_days;
 } garden_t;
 
-garden_t load_garden(FILE *gardenfd);
+garden_t load_data(FILE *gardenfd);
 
 #endif

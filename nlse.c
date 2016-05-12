@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "garden.h"
+#include "nlse.h"
 
-extern garden_t load_garden(FILE *gardenfd); 
+extern garden_t load_data(FILE *gardenfd); 
 
 int main(int argc, char* argv[]){
 	int lg;

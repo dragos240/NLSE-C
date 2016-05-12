@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include "garden.h"
 
@@ -15,11 +16,15 @@ garden_t load_data(FILE *gardenfd){
 	uint16_t play_days;
 
 	//data
+	fseek(gardenfd, 0, SEEK_END); //size
+	data = (char*)malloc(ftell(gardenfd));
 	fseek(gardenfd, SEEK_END, 0);
 	fread(data, 1, ftell(gardenfd), gardenfd);
 	//town_bytes
+	town_bytes = (char*)malloc(0x15);
 	fread(town_bytes, 0x14, 0x5C7B8, gardenfd);
 	//town_name
+	town_name = (char*)malloc(0x13);
 	fread(town_name, 0x12, 0x5C7BA, gardenfd);
 	//town_hall_color
 	fread(&town_hall_color, 1, 0x5C7B8, gardenfd);
@@ -43,6 +48,6 @@ garden_t load_data(FILE *gardenfd){
 				(uint16_t)data[0x5C83A + 3];
 
 	garden_t garden = {data, town_bytes, town_name, town_hall_color,
-					   grass_type, native_fruit, seconds_played, play_days};
+			grass_type, native_fruit, seconds_played, play_days};
 	return garden;
 }
