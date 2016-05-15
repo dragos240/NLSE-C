@@ -1,53 +1,112 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "helpers.h"
 #include "garden.h"
 
-garden_t load_data(FILE *gardenfd){
-	char* data;
-	char* town_bytes;
+extern unsigned short toUInt16(unsigned char* data, int location);
+extern unsigned int toUInt32(unsigned char* data, int location);
 
-	char* town_name;
-	int town_hall_color;
-	int train_station_color;
-	int grass_type;
-	int native_fruit;
-	uint32_t seconds_played;
-	uint16_t play_days;
+
+
+garden_t load_data(FILE *gardenfd){
+	int data_len;
+
+	unsigned char* data;
+	unsigned char* town_bytes;
+
+	unsigned char* town_name;
+	unsigned int town_hall_color;
+	unsigned int train_station_color;
+	unsigned int grass_type;
+	unsigned int native_fruit;
+	unsigned int seconds_played;
+	unsigned short play_days;
 
 	//data
-	fseek(gardenfd, 0, SEEK_END); //size
-	data = (char*)malloc(ftell(gardenfd));
-	fseek(gardenfd, SEEK_END, 0);
-	fread(data, 1, ftell(gardenfd), gardenfd);
+	fseek(gardenfd, 0L, SEEK_END); //size
+	data_len = ftell(gardenfd);
+	fseek(gardenfd, 0L, SEEK_SET);
+	data = (char*)malloc(data_len);
+	fread(data, 1, data_len, gardenfd);
 	//town_bytes
-	town_bytes = (char*)malloc(0x15);
-	fread(town_bytes, 0x14, 0x5C7B8, gardenfd);
+	town_bytes = (char*)malloc(0x14);
+	fseek(gardenfd, 0x5C7B8, SEEK_SET);
+	fread(town_bytes, 1, 0x14, gardenfd);
 	//town_name
-	town_name = (char*)malloc(0x13);
-	fread(town_name, 0x12, 0x5C7BA, gardenfd);
+	town_name = (char*)malloc(0x12);
+	fseek(gardenfd, 0x5C7BA, SEEK_SET);
+	fread(town_name, 1, 0x12, gardenfd);
 	//town_hall_color
-	fread(&town_hall_color, 1, 0x5C7B8, gardenfd);
+	fseek(gardenfd, 0x5C7B8, SEEK_SET);
+	fread(&town_hall_color, 1, 1, gardenfd);
 	town_hall_color = town_hall_color & 3;
 	//train_station_color
-	fread(&train_station_color, 1, 0x5C7B9, gardenfd);
+	fseek(gardenfd, 0x5C7B9, SEEK_SET);
+	fread(&train_station_color, 1, 1, gardenfd);
 	train_station_color = train_station_color & 3;
 	//grass_type
-	fread(&grass_type, 1, 0x4DA81, gardenfd);
+	fseek(gardenfd, 0x4DA81, SEEK_SET);
+	fread(&grass_type, 1, 1, gardenfd);
 	//native_fruit
-	fread(&native_fruit, 1, 0x5C836, gardenfd);
+	fseek(gardenfd, 0x5C836, SEEK_SET);
+	fread(&native_fruit, 1, 1, gardenfd);
 	//seconds_played
-	seconds_played = (uint32_t)data[0x5C7B0] << 24 |
-					 (uint32_t)data[0x5C7B0 + 1] << 16 |
-					 (uint32_t)data[0x5C7B0 + 2] << 8 |
-					 (uint32_t)data[0x5C7B0 + 3];
+	seconds_played = toUInt32(data, 0x5C7B0);
 	//play_days
-	play_days = (uint16_t)data[0x5C83A] << 24 |
-				(uint16_t)data[0x5C83A + 1] << 16 |
-				(uint16_t)data[0x5C83A + 2] << 8 |
-				(uint16_t)data[0x5C83A + 3];
+	play_days = toUInt16(data, 0x5C83A);
 
 	garden_t garden = {data, town_bytes, town_name, town_hall_color,
-			grass_type, native_fruit, seconds_played, play_days};
+			train_station_color, grass_type, native_fruit, seconds_played, play_days};
 	return garden;
 }
+
+int save_data(garden_t garden){
+	unsigned char* data;
+	unsigned char* town_bytes;
+
+	unsigned char* town_name;
+	unsigned int town_hall_color;
+	unsigned int train_station_color;
+	unsigned int grass_type;
+	unsigned int native_fruit;
+	unsigned int seconds_played;
+	unsigned short play_days;
+
+	data = garden.data;
+	town_bytes = garden.town_bytes;
+	town_name = garden.town_name;
+	town_hall_color = garden.town_hall_color;
+	train_station_color = garden.train_station_color;
+	grass_type = garden.grass_type;
+	native_fruit = garden.native_fruit;
+	seconds_played = garden.seconds_played;
+	play_days = garden.play_days;
+
+	return 0;
+}
+
+player_t get_player(char* dataarg){
+	unsigned char* data;
+	unsigned char* player_bytes;
+
+	unsigned int u32;
+	char hair, hair_color, face,
+		 eye_color, tan, u9;
+
+	char* name;
+	int gender;
+	char* home_town;
+
+	char* badges;
+	char** pockets;
+	char** island_box;
+	char** dressers;
+
+	data = dataarg;
+}
+
+int save_player(player_t player){
+
+}
+
